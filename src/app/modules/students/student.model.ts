@@ -4,7 +4,7 @@ import {
   LocalGuardian,
   Student,
   UserName,
-} from './students/student.interface';
+} from './student.interface';
 const userNameSchema = new Schema<UserName>({
   firstName: { type: String, required: true },
   middleName: String,
@@ -28,18 +28,21 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 const studentSchema = new Schema<Student>({
   id: String,
   name: userNameSchema,
-  gender: ['Male', 'Female', 'Others'],
+  gender: { type: String, enum: ['Male', 'Female', 'Others'], required: true },
   DOB: String,
   email: { type: String, required: true },
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
-  bloodGroup: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+  bloodGroup: {
+    type: String,
+    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+  },
   presentAddress: { type: String, required: true },
   permanentAddress: { type: String, required: true },
   guardian: guardianSchema,
   localGuardian: localGuardianSchema,
   profileImg: String,
-  isActive: ['Active', 'Blocked'],
+  isActive: { type: String, enum: ['Active', 'Blocked'], required: true },
 });
 
 export const StudentModel = model<Student>('Student', studentSchema);
