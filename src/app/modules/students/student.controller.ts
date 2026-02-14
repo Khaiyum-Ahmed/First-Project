@@ -3,7 +3,7 @@ import { StudentServices } from './student.service';
 
 const createStudent = async (req: Request, res: Response) => {
   try {
-    const student = req.body.Student;
+    const student = req.body.student;
 
     // will call service function to send this data
     const result = await StudentServices.createStudentIntoDB(student);
@@ -20,7 +20,7 @@ const createStudent = async (req: Request, res: Response) => {
 
 const getAllStudents = async (req: Request, res: Response) => {
   try {
-    const result = StudentServices.getAllStudentsFromDB;
+    const result = await StudentServices.getAllStudentsFromDB();
     res.status(200).json({
       success: true,
       message: 'Students are retrieve successfully',
@@ -34,10 +34,28 @@ const getAllStudents = async (req: Request, res: Response) => {
 const getSingleStudent = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params;
-    const result = await StudentServices.getSingleStudentFromDB(studentId);
+    const result = await StudentServices.getSingleStudentFromDB(
+      studentId as string
+    );
     res.status(200).json({
       success: true,
-      message: 'Student is retrieve successfully',
+      message: 'Single Student is retrieve successfully',
+      data: result,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const deleteAStudent = async (req: Request, res: Response) => {
+  try {
+    const { studentId } = req.params;
+    const result = await StudentServices.deleteAStudentFromDB(
+      studentId as string
+    );
+    res.status(200).json({
+      success: true,
+      message: 'Student Deleted successfully Done',
       data: result,
     });
   } catch (err) {
@@ -49,4 +67,5 @@ export const StudentControllers = {
   createStudent,
   getAllStudents,
   getSingleStudent,
+  deleteAStudent,
 };
