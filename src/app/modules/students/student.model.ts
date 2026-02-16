@@ -3,9 +3,10 @@ import {
   TGuardian,
   TLocalGuardian,
   TStudent,
-  StudentMethods,
+  // StudentMethods,
   TUserName,
-  StudentMongooseModel,
+  // StudentMongooseModel,
+  StudentMongooseStaticModel,
 } from './student.interface';
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -75,11 +76,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   },
 });
 
-const studentSchema = new Schema<
-  TStudent,
-  StudentMongooseModel,
-  StudentMethods
->({
+const studentSchema = new Schema<TStudent, StudentMongooseStaticModel>({
   id: { type: String, required: [true, 'ID is required'], unique: true },
   name: { type: userNameSchema, required: [true, 'Name is required'] },
   gender: {
@@ -142,12 +139,19 @@ const studentSchema = new Schema<
   isActive: { type: String, enum: ['Active', 'Blocked'], default: 'Active' },
 });
 
-studentSchema.methods.isUserExists = async function (id: string) {
+// Creating a custom Static method
+studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await StudentModel.findOne({ id });
   return existingUser;
 };
 
-export const StudentModel = model<TStudent, StudentMongooseModel>(
+// creating a custom instance method
+// studentSchema.methods.isUserExists = async function (id: string) {
+//   const existingUser = await StudentModel.findOne({ id });
+//   return existingUser;
+// };
+
+export const StudentModel = model<TStudent, StudentMongooseStaticModel>(
   'Student',
   studentSchema
 );

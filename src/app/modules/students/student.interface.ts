@@ -37,12 +37,20 @@ export type TStudent = {
   isActive: 'Active' | 'Blocked';
 };
 
-export type StudentMethods = {
-  isUserExists(id: string): Promise<TStudent | null>;
-};
+// For creating Static
 
-export type StudentMongooseModel = Model<
-  TStudent,
-  Record<string, never>,
-  StudentMethods
->;
+export interface StudentMongooseStaticModel extends Model<TStudent> {
+  isUserExists(id: string): Promise<TStudent | null>;
+}
+
+// For creating instance
+
+// export type StudentMethods = {
+//   isUserExists(id: string): Promise<TStudent | null>;
+// };
+
+// export type StudentMongooseModel = Model<
+//   TStudent,
+//   Record<string, never>,
+//   StudentMethods
+// >;
