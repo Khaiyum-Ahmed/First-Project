@@ -83,7 +83,6 @@ const studentSchema = new Schema<TStudent, StudentMongooseStaticModel>({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    unique: true,
     maxLength: [20, 'Password can not be more than 20 characters'],
   },
   name: { type: userNameSchema, required: [true, 'Name is required'] },
@@ -145,6 +144,7 @@ const studentSchema = new Schema<TStudent, StudentMongooseStaticModel>({
   },
   profileImg: { type: String },
   isActive: { type: String, enum: ['Active', 'Blocked'], default: 'Active' },
+  isDeleted: { type: Boolean, default: false },
 });
 
 // pre save middleware / Hook
@@ -152,7 +152,7 @@ const studentSchema = new Schema<TStudent, StudentMongooseStaticModel>({
 studentSchema.pre('save', async function () {
   // hashing password and save into DB
   // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this;
+  const user = this; // this refer student document
   user.password = await bcrypt.hash(
     user.password,
     Number(config.bcrypt_salt_rounds)
@@ -161,7 +161,12 @@ studentSchema.pre('save', async function () {
 
 // post save middleware / Hook
 studentSchema.post('save', function () {
-  console.log(this);
+  this.password = '';
+});
+
+// Query Middleware
+studentSchema.pre('find', async function () {
+  this.find;
 });
 
 // Creating a custom Static method

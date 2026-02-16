@@ -28,7 +28,7 @@ const getSingleStudentFromDB = async (id: string) => {
 };
 
 const deleteAStudentFromDB = async (id: string) => {
-  const result = await StudentModel.deleteOne({ id });
+  const result = await StudentModel.updateOne({ id }, { isDeleted: true });
   return result;
 };
 

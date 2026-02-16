@@ -48,8 +48,12 @@ const getAllStudents = async (req: Request, res: Response) => {
       message: 'Students are retrieve successfully',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'something went wrong',
+      error: err,
+    });
   }
 };
 
@@ -64,8 +68,12 @@ const getSingleStudent = async (req: Request, res: Response) => {
       message: 'Single Student is retrieve successfully',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'something went wrong',
+      error: err,
+    });
   }
 };
 
@@ -80,8 +88,12 @@ const deleteAStudent = async (req: Request, res: Response) => {
       message: 'Student Deleted successfully Done',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'something went wrong',
+      error: err,
+    });
   }
 };
 

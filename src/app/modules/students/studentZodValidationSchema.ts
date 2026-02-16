@@ -60,4 +60,5 @@ export const studentValidationZodSchema = z.object({
   profileImg: z.string().optional(),
 
   isActive: z.enum(['Active', 'Blocked']).default('Active'),
+  isDeleted: z.boolean(),
 });
