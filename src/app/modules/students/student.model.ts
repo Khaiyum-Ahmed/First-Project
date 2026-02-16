@@ -1,11 +1,13 @@
 import { Schema, model } from 'mongoose';
 import {
-  Guardian,
-  LocalGuardian,
-  Student,
-  UserName,
+  TGuardian,
+  TLocalGuardian,
+  TStudent,
+  StudentMethods,
+  TUserName,
+  StudentMongooseModel,
 } from './student.interface';
-const userNameSchema = new Schema<UserName>({
+const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: [true, 'First Name is required'],
@@ -18,7 +20,7 @@ const userNameSchema = new Schema<UserName>({
     trim: true,
   },
 });
-const guardianSchema = new Schema<Guardian>({
+const guardianSchema = new Schema<TGuardian>({
   fatherName: {
     type: String,
     required: [true, 'Father Name is required'],
@@ -50,7 +52,7 @@ const guardianSchema = new Schema<Guardian>({
     trim: true,
   },
 });
-const localGuardianSchema = new Schema<LocalGuardian>({
+const localGuardianSchema = new Schema<TLocalGuardian>({
   name: {
     type: String,
     required: [true, 'Guardian Name is required'],
@@ -73,7 +75,11 @@ const localGuardianSchema = new Schema<LocalGuardian>({
   },
 });
 
-const studentSchema = new Schema<Student>({
+const studentSchema = new Schema<
+  TStudent,
+  StudentMongooseModel,
+  StudentMethods
+>({
   id: { type: String, required: [true, 'ID is required'], unique: true },
   name: { type: userNameSchema, required: [true, 'Name is required'] },
   gender: {
@@ -136,4 +142,12 @@ const studentSchema = new Schema<Student>({
   isActive: { type: String, enum: ['Active', 'Blocked'], default: 'Active' },
 });
 
-export const StudentModel = model<Student>('Student', studentSchema);
+studentSchema.methods.isUserExists = async function (id: string) {
+  const existingUser = await StudentModel.findOne({ id });
+  return existingUser;
+};
+
+export const StudentModel = model<TStudent, StudentMongooseModel>(
+  'Student',
+  studentSchema
+);

@@ -34,7 +34,7 @@ export const studentValidationZodSchema = z.object({
 
   DOB: z.string().trim().min(1, 'Date Of Birth is required'),
 
-  email: z.email('Valid email is required'),
+  email: z.string().trim().email('Valid email is required'),
 
   contactNo: z.string().trim().min(1, 'Contact No is required'),
 

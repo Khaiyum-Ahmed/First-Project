@@ -1,5 +1,5 @@
 {
-   "include": ["src"], // which files to compile
+  "include": ["src"], // which files to compile
   "exclude": ["node_modules"], // which files to skip
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
@@ -24,7 +24,7 @@
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+    "exactOptionalPropertyTypes": false,
 
     // Style Options
     // "noImplicitReturns": true,
@@ -41,6 +41,6 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
+    "skipLibCheck": true
   }
 }
