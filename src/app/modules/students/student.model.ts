@@ -132,7 +132,7 @@ const studentSchema = new Schema<Student>({
     required: [true, 'Local Guardian is required'],
     trim: true,
   },
-  profileImg: String,
+  profileImg: { type: String },
   isActive: { type: String, enum: ['Active', 'Blocked'], default: 'Active' },
 });
 

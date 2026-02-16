@@ -31,6 +31,6 @@ export type Student = {
   permanentAddress: string;
   guardian: Guardian;
   localGuardian: LocalGuardian;
-  profileImg?: string;
+  profileImg?: string | undefined;
   isActive: 'Active' | 'Blocked';
 };
