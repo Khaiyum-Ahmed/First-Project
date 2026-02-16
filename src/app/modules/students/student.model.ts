@@ -165,8 +165,16 @@ studentSchema.post('save', function () {
 });
 
 // Query Middleware
-studentSchema.pre('find', async function () {
-  this.find;
+studentSchema.pre('find', function () {
+  this.find({ isDeleted: { $ne: true } });
+});
+studentSchema.pre('findOne', function () {
+  this.find({ isDeleted: { $ne: true } });
+});
+
+// [{$match:{isDeleted:{$ne:true}}}] , {$match: {id:"123456"}}
+studentSchema.pre('aggregate', function () {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
 });
 
 // Creating a custom Static method
