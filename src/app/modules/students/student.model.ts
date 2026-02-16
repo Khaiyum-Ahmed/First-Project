@@ -78,73 +78,84 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   },
 });
 
-const studentSchema = new Schema<TStudent, StudentMongooseStaticModel>({
-  id: { type: String, required: [true, 'ID is required'], unique: true },
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-    maxLength: [20, 'Password can not be more than 20 characters'],
-  },
-  name: { type: userNameSchema, required: [true, 'Name is required'] },
-  gender: {
-    type: String,
-    enum: {
-      values: ['Male', 'Female', 'Others'],
-      message: '{VALUE} is not valid',
+const studentSchema = new Schema<TStudent, StudentMongooseStaticModel>(
+  {
+    id: { type: String, required: [true, 'ID is required'], unique: true },
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      maxLength: [20, 'Password can not be more than 20 characters'],
     },
-    required: [true, 'Gender is required'],
-  },
-  DOB: {
-    type: String,
-    required: [true, 'Date Of Birth is required'],
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-    trim: true,
-  },
-  contactNo: {
-    type: String,
-    required: [true, 'Contact No is required'],
-    trim: true,
-  },
-  emergencyContactNo: {
-    type: String,
-    required: [true, 'Emergency Contact No is required'],
-    trim: true,
-  },
-  bloodGroup: {
-    type: String,
-    enum: {
-      values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-      message: '{VALUE} is not a valid blood Group',
+    name: { type: userNameSchema, required: [true, 'Name is required'] },
+    gender: {
+      type: String,
+      enum: {
+        values: ['Male', 'Female', 'Others'],
+        message: '{VALUE} is not valid',
+      },
+      required: [true, 'Gender is required'],
     },
+    DOB: {
+      type: String,
+      required: [true, 'Date Of Birth is required'],
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+      trim: true,
+    },
+    contactNo: {
+      type: String,
+      required: [true, 'Contact No is required'],
+      trim: true,
+    },
+    emergencyContactNo: {
+      type: String,
+      required: [true, 'Emergency Contact No is required'],
+      trim: true,
+    },
+    bloodGroup: {
+      type: String,
+      enum: {
+        values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+        message: '{VALUE} is not a valid blood Group',
+      },
+    },
+    presentAddress: {
+      type: String,
+      required: [true, 'Present Address is required'],
+      trim: true,
+    },
+    permanentAddress: {
+      type: String,
+      required: [true, 'Permanent Address is required'],
+      trim: true,
+    },
+    guardian: {
+      type: guardianSchema,
+      required: [true, 'Guardian is required'],
+      trim: true,
+    },
+    localGuardian: {
+      type: localGuardianSchema,
+      required: [true, 'Local Guardian is required'],
+      trim: true,
+    },
+    profileImg: { type: String },
+    isActive: { type: String, enum: ['Active', 'Blocked'], default: 'Active' },
+    isDeleted: { type: Boolean, default: false },
   },
-  presentAddress: {
-    type: String,
-    required: [true, 'Present Address is required'],
-    trim: true,
-  },
-  permanentAddress: {
-    type: String,
-    required: [true, 'Permanent Address is required'],
-    trim: true,
-  },
-  guardian: {
-    type: guardianSchema,
-    required: [true, 'Guardian is required'],
-    trim: true,
-  },
-  localGuardian: {
-    type: localGuardianSchema,
-    required: [true, 'Local Guardian is required'],
-    trim: true,
-  },
-  profileImg: { type: String },
-  isActive: { type: String, enum: ['Active', 'Blocked'], default: 'Active' },
-  isDeleted: { type: Boolean, default: false },
+  {
+    toJSON: {
+      virtuals: true,
+    },
+  }
+);
+// virtual
+studentSchema.virtual('fullName').get(function () {
+  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
 
 // pre save middleware / Hook
