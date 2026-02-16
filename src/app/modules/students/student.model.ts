@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
 import {
   TGuardian,
   TLocalGuardian,
@@ -8,6 +9,7 @@ import {
   // StudentMongooseModel,
   StudentMongooseStaticModel,
 } from './student.interface';
+import config from '../../config';
 const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
@@ -78,6 +80,12 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, StudentMongooseStaticModel>({
   id: { type: String, required: [true, 'ID is required'], unique: true },
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
+    unique: true,
+    maxLength: [20, 'Password can not be more than 20 characters'],
+  },
   name: { type: userNameSchema, required: [true, 'Name is required'] },
   gender: {
     type: String,
@@ -137,6 +145,23 @@ const studentSchema = new Schema<TStudent, StudentMongooseStaticModel>({
   },
   profileImg: { type: String },
   isActive: { type: String, enum: ['Active', 'Blocked'], default: 'Active' },
+});
+
+// pre save middleware / Hook
+
+studentSchema.pre('save', async function () {
+  // hashing password and save into DB
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+});
+
+// post save middleware / Hook
+studentSchema.post('save', function () {
+  console.log(this);
 });
 
 // Creating a custom Static method
