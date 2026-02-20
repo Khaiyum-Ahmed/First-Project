@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { model, Schema } from 'mongoose';
 import { TUser } from './user.interface';
-
+import bcrypt from 'bcrypt';
+import config from '../../config';
 const userSchema = new Schema<TUser>(
   {
     id: { type: String, required: true },
@@ -18,5 +20,19 @@ const userSchema = new Schema<TUser>(
     timestamps: true,
   }
 );
+
+// pre hook middleware
+userSchema.pre('save', async function () {
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+});
+
+// post hook middleware
+userSchema.post('save', function () {
+  this.password = '';
+});
 
 export const UserModel = model<TUser>('user', userSchema);
