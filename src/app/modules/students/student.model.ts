@@ -194,12 +194,6 @@ studentSchema.statics.isUserExists = async function (id: string) {
   return existingUser;
 };
 
-// creating a custom instance method
-// studentSchema.methods.isUserExists = async function (id: string) {
-//   const existingUser = await StudentModel.findOne({ id });
-//   return existingUser;
-// };
-
 export const StudentModel = model<TStudent, StudentMongooseStaticModel>(
   'Student',
   studentSchema

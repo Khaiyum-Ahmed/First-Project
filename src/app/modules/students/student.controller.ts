@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { StudentServices } from './student.service';
 import { studentValidationZodSchema } from './studentZodValidationSchema';
@@ -6,24 +7,11 @@ import { studentValidationZodSchema } from './studentZodValidationSchema';
 const createStudent = async (req: Request, res: Response) => {
   try {
     const student = req.body.student;
-    // Data Validation Using Joi
-    // const { error, value } = StudentJoiValidationSchema.validate(student);
 
     // Data Validation Using Zod
     const zodParseData = studentValidationZodSchema.parse(student);
 
-    // will call service function to send this data
-    // const result = await StudentServices.createStudentIntoDB(value);
     const result = await StudentServices.createStudentIntoDB(zodParseData);
-
-    // Joi Error response send
-    // if (error) {
-    //   res.status(500).json({
-    //     success: false,
-    //     message: 'Something Went wrong',
-    //     error: error.details,
-    //   });
-    // }
 
     // send response
     res.status(200).json({

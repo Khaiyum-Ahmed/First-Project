@@ -44,15 +44,3 @@ export type TStudent = {
 export interface StudentMongooseStaticModel extends Model<TStudent> {
   isUserExists(id: string): Promise<TStudent | null>;
 }
-
-// For creating instance
-
-// export type StudentMethods = {
-//   isUserExists(id: string): Promise<TStudent | null>;
-// };
-
-// export type StudentMongooseModel = Model<
-//   TStudent,
-//   Record<string, never>,
-//   StudentMethods
-// >;
